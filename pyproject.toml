@@ -20,6 +20,8 @@ dependencies = [
     "mlflow[databricks]>=3.1.1",
     "debugpy>=1.8.15",
     "python-dotenv>=1.1.1",
+    "sqlalchemy>=2.0.41",
+    "websockets>=15.0.1",
 ]
 requires-python = ">=3.11"
 

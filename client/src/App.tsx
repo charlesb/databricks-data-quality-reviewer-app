@@ -1,9 +1,9 @@
-import { WelcomePage } from "./pages/WelcomePage";
+import { QuarantinePage } from "./pages/QuarantinePage";
 
 function App() {
   return (
     <div className="min-h-screen bg-background">
-      <WelcomePage />
+      <QuarantinePage />
     </div>
   );
 }

@@ -294,4 +294,5 @@ mlartifacts/
 .uv/
 
 # Generated client
-client/src/client/
+client/src/client/# Databricks sync snapshots contain sensitive user information
+.databricks/sync-snapshots/

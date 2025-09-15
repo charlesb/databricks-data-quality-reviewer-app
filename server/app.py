@@ -9,6 +9,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 
 from server.routers import router
+from server.routers.quarantine import router as quarantine_router
 
 
 # Load environment variables from .env.local if it exists
@@ -51,6 +52,7 @@ app.add_middleware(
 )
 
 app.include_router(router, prefix='/api', tags=['api'])
+app.include_router(quarantine_router, tags=['quarantine'])
 
 
 @app.get('/health')
