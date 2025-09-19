@@ -1,0 +1,357 @@
+/* Sodexo-inspired Corporate Theme */
+
+/* Import Open Sans font similar to Sodexo */
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;600;700&display=swap');
+
+:root {
+  /* Sodexo-inspired color palette */
+  --sodexo-primary-blue: #0066cc;
+  --sodexo-dark-blue: #003d7a;
+  --sodexo-light-blue: #e6f2ff;
+  --sodexo-accent-red: #e31e24;
+  --sodexo-white: #ffffff;
+  --sodexo-light-gray: #f8f9fa;
+  --sodexo-medium-gray: #e5e7eb;
+  --sodexo-dark-gray: #374151;
+  --sodexo-text-primary: #1f2937;
+  --sodexo-text-secondary: #6b7280;
+
+  /* Typography */
+  --sodexo-font-family: 'Open Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+
+  /* Spacing */
+  --sodexo-container-max-width: 1200px;
+  --sodexo-section-padding: 3rem 1.5rem;
+  --sodexo-card-padding: 2rem;
+
+  /* Shadows */
+  --sodexo-card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --sodexo-hover-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+
+  /* Border radius */
+  --sodexo-border-radius: 8px;
+  --sodexo-border-radius-lg: 12px;
+}
+
+/* Global typography */
+body {
+  font-family: var(--sodexo-font-family);
+  color: var(--sodexo-text-primary);
+  line-height: 1.6;
+  background-color: var(--sodexo-light-gray);
+}
+
+/* Header styling */
+.sodexo-header {
+  background: linear-gradient(135deg, var(--sodexo-primary-blue) 0%, var(--sodexo-dark-blue) 100%);
+  color: var(--sodexo-white);
+  padding: 2rem 0;
+  margin-bottom: 2rem;
+}
+
+.sodexo-header h1 {
+  font-size: 2.5rem;
+  font-weight: 600;
+  margin: 0;
+  text-align: center;
+}
+
+.sodexo-header p {
+  font-size: 1.1rem;
+  opacity: 0.9;
+  margin: 0.5rem 0 0 0;
+  text-align: center;
+  font-weight: 300;
+}
+
+/* Main container */
+.sodexo-main {
+  max-width: var(--sodexo-container-max-width);
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+/* Navigation/Actions bar */
+.sodexo-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  padding: 1rem;
+  background: var(--sodexo-white);
+  border-radius: var(--sodexo-border-radius);
+  box-shadow: var(--sodexo-card-shadow);
+}
+
+/* Statistics cards */
+.sodexo-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.sodexo-stat-card {
+  background: var(--sodexo-white);
+  padding: var(--sodexo-card-padding);
+  border-radius: var(--sodexo-border-radius-lg);
+  box-shadow: var(--sodexo-card-shadow);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  border-left: 4px solid var(--sodexo-primary-blue);
+}
+
+.sodexo-stat-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--sodexo-hover-shadow);
+}
+
+.sodexo-stat-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+.sodexo-stat-title {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--sodexo-text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.sodexo-stat-icon {
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  background: var(--sodexo-light-blue);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--sodexo-primary-blue);
+}
+
+.sodexo-stat-value {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--sodexo-primary-blue);
+  line-height: 1;
+}
+
+.sodexo-stat-description {
+  font-size: 0.875rem;
+  color: var(--sodexo-text-secondary);
+  margin-top: 0.5rem;
+}
+
+/* Tabs styling */
+.sodexo-tabs {
+  background: var(--sodexo-white);
+  border-radius: var(--sodexo-border-radius-lg);
+  box-shadow: var(--sodexo-card-shadow);
+  overflow: hidden;
+}
+
+.sodexo-tabs-list {
+  background: var(--sodexo-light-gray);
+  padding: 0.5rem;
+  display: flex;
+  gap: 0.25rem;
+  border-bottom: 1px solid var(--sodexo-medium-gray);
+}
+
+.sodexo-tab-trigger {
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--sodexo-border-radius);
+  font-weight: 500;
+  color: var(--sodexo-text-secondary);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: var(--sodexo-font-family);
+}
+
+.sodexo-tab-trigger[data-state="active"] {
+  background: var(--sodexo-primary-blue);
+  color: var(--sodexo-white);
+  box-shadow: 0 2px 4px rgba(0, 102, 204, 0.2);
+}
+
+.sodexo-tab-trigger:hover:not([data-state="active"]) {
+  background: var(--sodexo-white);
+  color: var(--sodexo-primary-blue);
+}
+
+.sodexo-tab-content {
+  padding: 2rem;
+  min-height: 400px;
+}
+
+/* Buttons */
+.sodexo-button {
+  background: var(--sodexo-primary-blue);
+  color: var(--sodexo-white);
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--sodexo-border-radius);
+  font-weight: 500;
+  font-family: var(--sodexo-font-family);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.sodexo-button:hover {
+  background: var(--sodexo-dark-blue);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 102, 204, 0.3);
+}
+
+.sodexo-button-secondary {
+  background: var(--sodexo-white);
+  color: var(--sodexo-primary-blue);
+  border: 2px solid var(--sodexo-primary-blue);
+}
+
+.sodexo-button-secondary:hover {
+  background: var(--sodexo-primary-blue);
+  color: var(--sodexo-white);
+}
+
+.sodexo-button-accent {
+  background: var(--sodexo-accent-red);
+}
+
+.sodexo-button-accent:hover {
+  background: #c41e24;
+}
+
+/* Empty state */
+.sodexo-empty-state {
+  text-align: center;
+  padding: 3rem 2rem;
+  color: var(--sodexo-text-secondary);
+}
+
+.sodexo-empty-icon {
+  width: 4rem;
+  height: 4rem;
+  margin: 0 auto 1rem;
+  background: var(--sodexo-light-blue);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--sodexo-primary-blue);
+}
+
+.sodexo-empty-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--sodexo-text-primary);
+  margin-bottom: 0.5rem;
+}
+
+.sodexo-empty-description {
+  font-size: 1rem;
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+/* Records table/grid */
+.sodexo-records-grid {
+  display: grid;
+  gap: 1rem;
+}
+
+.sodexo-record-card {
+  background: var(--sodexo-white);
+  padding: 1.5rem;
+  border-radius: var(--sodexo-border-radius);
+  box-shadow: var(--sodexo-card-shadow);
+  border-left: 4px solid var(--sodexo-accent-red);
+  transition: all 0.2s ease;
+}
+
+.sodexo-record-card:hover {
+  transform: translateX(4px);
+  box-shadow: var(--sodexo-hover-shadow);
+}
+
+/* Loading states */
+.sodexo-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem;
+  color: var(--sodexo-text-secondary);
+}
+
+.sodexo-spinner {
+  width: 2rem;
+  height: 2rem;
+  border: 2px solid var(--sodexo-light-blue);
+  border-top: 2px solid var(--sodexo-primary-blue);
+  border-radius: 50%;
+  animation: sodexo-spin 1s linear infinite;
+  margin-right: 0.75rem;
+}
+
+@keyframes sodexo-spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .sodexo-header h1 {
+    font-size: 2rem;
+  }
+
+  .sodexo-stats-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .sodexo-actions {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .sodexo-tabs-list {
+    flex-wrap: wrap;
+  }
+
+  .sodexo-tab-content {
+    padding: 1rem;
+  }
+}
+
+/* Badge styling */
+.sodexo-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.sodexo-badge-primary {
+  background: var(--sodexo-light-blue);
+  color: var(--sodexo-primary-blue);
+}
+
+.sodexo-badge-warning {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.sodexo-badge-danger {
+  background: #fee2e2;
+  color: var(--sodexo-accent-red);
+}

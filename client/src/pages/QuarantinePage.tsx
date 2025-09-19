@@ -7,7 +7,7 @@ import { Input } from '@/components/ui/input';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { CheckCircle, AlertCircle, Clock, Filter, Save, RefreshCw, BarChart3, AlertTriangle, DollarSign, Building } from 'lucide-react';
+import { CheckCircle, AlertCircle, Clock, Filter, Save, RefreshCw, BarChart3, AlertTriangle, DollarSign, Building, ChevronLeft, ChevronRight } from 'lucide-react';
 import '../styles/sodexo-theme.css';
 
 import { QuarantineService } from '@/fastapi_client';
@@ -24,6 +24,8 @@ export const QuarantinePage: React.FC = () => {
   const [selectedRecords, setSelectedRecords] = useState<Set<string>>(new Set());
   const [editState, setEditState] = useState<EditState>({});
   const [batchMode, setBatchMode] = useState(false);
+  const [currentPage, setCurrentPage] = useState(0);
+  const [pageSize, setPageSize] = useState(50);
 
   const queryClient = useQueryClient();
 
@@ -47,21 +49,21 @@ export const QuarantinePage: React.FC = () => {
     }
   };
 
-  // Fetch quarantine records
+  // Fetch quarantine records with pagination
   const {
     data: quarantineData,
     isLoading,
     error,
     refetch
   } = useQuery({
-    queryKey: ['quarantine-records', activeTab, 'v4'],
+    queryKey: ['quarantine-records', activeTab, currentPage, pageSize, 'v5'],
     queryFn: async () => {
-      // Use real Unity Catalog data - fetch all records
       const violationType = activeTab !== 'ALL' ? activeTab : undefined;
+      const offset = currentPage * pageSize;
       return await QuarantineService.getQuarantineRecordsApiQuarantineRecordsGet(
         violationType,
-        2000,
-        0
+        pageSize,
+        offset
       );
     },
     refetchInterval: 30000, // Auto-refresh every 30 seconds
@@ -86,7 +88,8 @@ export const QuarantinePage: React.FC = () => {
       setEditState({});
       setBatchMode(false);
 
-      // Refresh data
+      // Reset to first page and refresh data
+      setCurrentPage(0);
       queryClient.invalidateQueries({ queryKey: ['quarantine-records'] });
       queryClient.invalidateQueries({ queryKey: ['violation-counts'] });
 
@@ -100,6 +103,10 @@ export const QuarantinePage: React.FC = () => {
 
   const records = quarantineData?.records || [];
   const totalCount = quarantineData?.total_count || 0;
+  const filteredCount = quarantineData?.filtered_count || 0;
+  const totalPages = Math.ceil(filteredCount / pageSize);
+  const hasNextPage = currentPage < totalPages - 1;
+  const hasPrevPage = currentPage > 0;
 
   const handleRecordSelection = (compositeKey: string, selected: boolean) => {
     const newSelection = new Set(selectedRecords);
@@ -447,14 +454,14 @@ export const QuarantinePage: React.FC = () => {
       {/* Tabs for Violation Types */}
       <Tabs value={activeTab} onValueChange={(value) => setActiveTab(value as ViolationTab)}>
         <TabsList>
-          <TabsTrigger value="ALL">All ({totalCount})</TabsTrigger>
-          <TabsTrigger value="PAYMENT_DATE">
+          <TabsTrigger value="ALL" onClick={() => setCurrentPage(0)}>All ({totalCount})</TabsTrigger>
+          <TabsTrigger value="PAYMENT_DATE" onClick={() => setCurrentPage(0)}>
             Payment Date ({violationCounts?.violation_counts?.PAYMENT_DATE || 0})
           </TabsTrigger>
-          <TabsTrigger value="BALANCE">
+          <TabsTrigger value="BALANCE" onClick={() => setCurrentPage(0)}>
             Balance ({violationCounts?.violation_counts?.BALANCE || 0})
           </TabsTrigger>
-          <TabsTrigger value="COST_CENTER">
+          <TabsTrigger value="COST_CENTER" onClick={() => setCurrentPage(0)}>
             Cost Center ({violationCounts?.violation_counts?.COST_CENTER || 0})
           </TabsTrigger>
         </TabsList>
@@ -475,7 +482,75 @@ export const QuarantinePage: React.FC = () => {
             </Card>
           ) : (
             <div className="space-y-4">
+              {/* Pagination Info */}
+              <div className="flex items-center justify-between bg-gray-50 p-4 rounded-lg">
+                <div className="flex items-center space-x-4">
+                  <span className="text-sm text-gray-600">
+                    Showing {currentPage * pageSize + 1}-{Math.min((currentPage + 1) * pageSize, filteredCount)} of {filteredCount} records
+                  </span>
+                  <div className="flex items-center space-x-2">
+                    <label className="text-sm text-gray-600">Page size:</label>
+                    <select
+                      value={pageSize}
+                      onChange={(e) => { setPageSize(Number(e.target.value)); setCurrentPage(0); }}
+                      className="border border-gray-300 rounded px-2 py-1 text-sm"
+                    >
+                      <option value={25}>25</option>
+                      <option value={50}>50</option>
+                      <option value={100}>100</option>
+                    </select>
+                  </div>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setCurrentPage(prev => Math.max(0, prev - 1))}
+                    disabled={!hasPrevPage || isLoading}
+                  >
+                    <ChevronLeft className="w-4 h-4 mr-1" />
+                    Previous
+                  </Button>
+                  <span className="text-sm text-gray-600 px-3">
+                    Page {currentPage + 1} of {totalPages}
+                  </span>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setCurrentPage(prev => Math.min(totalPages - 1, prev + 1))}
+                    disabled={!hasNextPage || isLoading}
+                  >
+                    Next
+                    <ChevronRight className="w-4 h-4 ml-1" />
+                  </Button>
+                </div>
+              </div>
+
+              {/* Records */}
               {records.map(renderRecord)}
+
+              {/* Bottom Pagination */}
+              <div className="flex items-center justify-center space-x-2 pt-4">
+                <Button
+                  variant="outline"
+                  onClick={() => setCurrentPage(prev => Math.max(0, prev - 1))}
+                  disabled={!hasPrevPage || isLoading}
+                >
+                  <ChevronLeft className="w-4 h-4 mr-1" />
+                  Previous
+                </Button>
+                <span className="text-sm text-gray-600 px-4">
+                  Page {currentPage + 1} of {totalPages}
+                </span>
+                <Button
+                  variant="outline"
+                  onClick={() => setCurrentPage(prev => Math.min(totalPages - 1, prev + 1))}
+                  disabled={!hasNextPage || isLoading}
+                >
+                  Next
+                  <ChevronRight className="w-4 h-4 ml-1" />
+                </Button>
+              </div>
             </div>
           )}
         </TabsContent>
