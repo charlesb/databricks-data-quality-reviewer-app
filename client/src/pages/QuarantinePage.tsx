@@ -7,7 +7,8 @@ import { Input } from '@/components/ui/input';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { CheckCircle, AlertCircle, Clock, Filter, Save, RefreshCw } from 'lucide-react';
+import { CheckCircle, AlertCircle, Clock, Filter, Save, RefreshCw, BarChart3, AlertTriangle, DollarSign, Building } from 'lucide-react';
+import '../styles/sodexo-theme.css';
 
 import { QuarantineService } from '@/fastapi_client';
 import { QuarantineRecord, ViolationType, QuarantineRecordUpdate, BatchUpdateRequest, MergeResult } from '@/fastapi_client';
@@ -26,6 +27,26 @@ export const QuarantinePage: React.FC = () => {
 
   const queryClient = useQueryClient();
 
+  // Helper function to get violation icon
+  const getViolationIcon = (type: ViolationType) => {
+    switch (type) {
+      case 'PAYMENT_DATE': return Clock;
+      case 'BALANCE': return DollarSign;
+      case 'COST_CENTER': return Building;
+      default: return AlertTriangle;
+    }
+  };
+
+  // Helper function to get violation color
+  const getViolationColor = (type: ViolationType) => {
+    switch (type) {
+      case 'PAYMENT_DATE': return '#0066cc';
+      case 'BALANCE': return '#e31e24';
+      case 'COST_CENTER': return '#f59e0b';
+      default: return '#6b7280';
+    }
+  };
+
   // Fetch quarantine records
   const {
     data: quarantineData,
@@ -33,12 +54,18 @@ export const QuarantinePage: React.FC = () => {
     error,
     refetch
   } = useQuery({
-    queryKey: ['quarantine-records', activeTab],
+    queryKey: ['quarantine-records', activeTab, 'v4'],
     queryFn: async () => {
-      // Use test data for demonstration
-      return await QuarantineService.getTestQuarantineDataApiQuarantineTestDataGet();
+      // Use real Unity Catalog data - fetch all records
+      const violationType = activeTab !== 'ALL' ? activeTab : undefined;
+      return await QuarantineService.getQuarantineRecordsApiQuarantineRecordsGet(
+        violationType,
+        2000,
+        0
+      );
     },
     refetchInterval: 30000, // Auto-refresh every 30 seconds
+    staleTime: 0, // Always consider data stale to force refresh
   });
 
   // Fetch violation counts

@@ -95,7 +95,7 @@ async def get_quarantine_records(
     try:
         filter_params = QuarantineFilter(
             violation_type=violation_type,
-            limit=min(max(limit, 1), 1000),  # Ensure limit is between 1-1000
+            limit=min(max(limit, 1), 2000),  # Ensure limit is between 1-2000
             offset=max(offset, 0)  # Ensure offset is non-negative
         )
 
@@ -105,6 +105,7 @@ async def get_quarantine_records(
     except Exception as e:
         logger.error(f"Failed to get quarantine records: {e}")
         raise HTTPException(status_code=500, detail=f"Failed to retrieve quarantine records: {str(e)}")
+
 
 
 @router.get("/violation-counts")

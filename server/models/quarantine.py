@@ -15,7 +15,7 @@ class ViolationType(str, Enum):
 
 class QuarantineRecord(BaseModel):
     """Model for a quarantined transaction record."""
-    # Core identifying fields
+    # Core identifying fields (these map to Unity Catalog columns)
     id: int
     date: str
     status: str
@@ -26,7 +26,7 @@ class QuarantineRecord(BaseModel):
     arrears_balance: Optional[int] = None
     cost_center_code: Optional[str] = None
 
-    # Display context fields (read-only)
+    # Display context fields (read-only from Unity Catalog)
     acc_fv_change_before_taxes: Optional[int] = None
     accounting_treatment_id: Optional[int] = None
     accrued_interest: Optional[int] = None
@@ -38,7 +38,7 @@ class QuarantineRecord(BaseModel):
     end_date: Optional[str] = None
     first_payment_date: Optional[str] = None
     guarantee_scheme: Optional[str] = None
-    limit_amount: Optional[int] = None
+    imit_amount: Optional[int] = None  # Maps to 'imit_amount' column in Unity Catalog
     last_payment_date: Optional[str] = None
     minimum_balance_eur: Optional[int] = None
     purpose: Optional[str] = None
@@ -134,7 +134,7 @@ class AuditTrailEntry(BaseModel):
 class QuarantineFilter(BaseModel):
     """Filter options for quarantine records."""
     violation_type: Optional[ViolationType] = None
-    limit: int = Field(default=100, ge=1, le=1000)
+    limit: int = Field(default=100, ge=1, le=2000)
     offset: int = Field(default=0, ge=0)
 
 
